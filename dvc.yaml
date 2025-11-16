@@ -1,0 +1,53 @@
+stages:
+  mlflow_initiate_run:
+    cmd: python -m src.mlflow_initiate_run_id
+    deps:
+    - src/mlflow_initiate_run_id.py
+    outs:
+    - mlfow_run_id.txt
+
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - mlfow_run_id.txt
+    - src/data/data_ingestion.py
+    - src/mlflow_run_id_fetch_helper.py
+    outs:
+    - data/raw
+  data_preprocessing:
+    cmd: python -m src.preprocessing.data_preprocessing
+    deps:
+    - data/raw
+    - mlfow_run_id.txt
+    - src/mlflow_run_id_fetch_helper.py
+    - src/preprocessing/data_preprocessing.py
+    outs:
+    - data/processed
+  feature_engineering:
+    cmd: python -m src.features.feature_engineering
+    deps:
+    - data/processed
+    - mlfow_run_id.txt
+    - src/features/feature_engineering.py
+    - src/mlflow_run_id_fetch_helper.py
+    outs:
+    - data/interim
+  model_building:
+    cmd: python -m src.model.model_building
+    deps:
+    - data/interim
+    - mlfow_run_id.txt
+    - src/mlflow_run_id_fetch_helper.py
+    - src/model/model_building.py
+    outs:
+    - models
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation
+    deps:
+    - data/interim
+    - mlfow_run_id.txt
+    - models
+    - src/mlflow_run_id_fetch_helper.py
+    - src/model/model_evaluation.py
+    outs:
+    - reports

@@ -1,0 +1,144 @@
+schema: '2.0'
+stages:
+  mlflow_initiate_run:
+    cmd: python -m src.mlflow_initiate_run_id
+    deps:
+    - path: src/mlflow_initiate_run_id.py
+      hash: md5
+      md5: 93006ec646d574003cf52a5eff16e4fa
+      size: 508
+    outs:
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 289ed69192a2c42b6fffd6bb3e99e8eb
+      size: 1279
+    - path: src/mlflow_run_id_fetch_helper.py
+      hash: md5
+      md5: 85a746bf40c1e58bea65a99e9533701a
+      size: 177
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: fb326d2eec197669f9638afde28356bf.dir
+      size: 827973
+      nfiles: 2
+  data_preprocessing:
+    cmd: python -m src.preprocessing.data_preprocessing
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: fb326d2eec197669f9638afde28356bf.dir
+      size: 827973
+      nfiles: 2
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+    - path: src/mlflow_run_id_fetch_helper.py
+      hash: md5
+      md5: 85a746bf40c1e58bea65a99e9533701a
+      size: 177
+    - path: src/preprocessing/data_preprocessing.py
+      hash: md5
+      md5: 9474cce5b7a845842a2fc7d5d8b846e9
+      size: 3077
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: ef37afd17951ea8af23114b28d26f784.dir
+      size: 566210
+      nfiles: 2
+  feature_engineering:
+    cmd: python -m src.features.feature_engineering
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: ef37afd17951ea8af23114b28d26f784.dir
+      size: 566210
+      nfiles: 2
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+    - path: src/features/feature_engineering.py
+      hash: md5
+      md5: 23da1d277a37965fd7e6b804ba9a78a2
+      size: 1896
+    - path: src/mlflow_run_id_fetch_helper.py
+      hash: md5
+      md5: 85a746bf40c1e58bea65a99e9533701a
+      size: 177
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: 7be3ea55f08ec6fe02a4951594c8c511.dir
+      size: 653736
+      nfiles: 2
+  model_building:
+    cmd: python -m src.model.model_building
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: 7be3ea55f08ec6fe02a4951594c8c511.dir
+      size: 653736
+      nfiles: 2
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+    - path: src/mlflow_run_id_fetch_helper.py
+      hash: md5
+      md5: 85a746bf40c1e58bea65a99e9533701a
+      size: 177
+    - path: src/model/model_building.py
+      hash: md5
+      md5: bf2261ceab23209ea4865919076a7dad
+      size: 1496
+    outs:
+    - path: models
+      hash: md5
+      md5: da91321651e8b93dcfe7c065c4960821.dir
+      size: 20599
+      nfiles: 1
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: 7be3ea55f08ec6fe02a4951594c8c511.dir
+      size: 653736
+      nfiles: 2
+    - path: mlfow_run_id.txt
+      hash: md5
+      md5: 578325b04ea2b6d5b3f45ecab88291ca
+      size: 32
+    - path: models
+      hash: md5
+      md5: da91321651e8b93dcfe7c065c4960821.dir
+      size: 20599
+      nfiles: 1
+    - path: src/mlflow_run_id_fetch_helper.py
+      hash: md5
+      md5: 85a746bf40c1e58bea65a99e9533701a
+      size: 177
+    - path: src/model/model_evaluation.py
+      hash: md5
+      md5: 31be3008b7a29149777a1c7b0f2039ab
+      size: 1568
+    outs:
+    - path: reports
+      hash: md5
+      md5: dedbb8ec5f8d911934ce3ce204b56d53.dir
+      size: 145
+      nfiles: 1

@@ -1,0 +1,4 @@
+[core]
+    remote = datastore
+['remote "datastore"']
+    url = s3://sentiment-classification-storage-demo-bucket
