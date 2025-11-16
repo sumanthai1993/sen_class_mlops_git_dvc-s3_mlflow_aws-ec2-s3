@@ -27,7 +27,7 @@ DATA_FILE_PATH = 'https://raw.githubusercontent.com/campusx-official/jupyter-mas
 
 #DATA PARAMS
 TEST_SIZE = 0.2
-COUNT_VEC_FEATURES = 30
+COUNT_VEC_FEATURES = 50
 
 
 #####----MODEL PARAMS----#####

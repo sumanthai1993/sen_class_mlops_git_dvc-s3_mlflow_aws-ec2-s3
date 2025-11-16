@@ -2,6 +2,7 @@ stages:
   mlflow_initiate_run:
     cmd: python -m src.mlflow_initiate_run_id
     deps:
+    - src/config.py
     - src/mlflow_initiate_run_id.py
     outs:
     - mlfow_run_id.txt
@@ -10,6 +11,7 @@ stages:
     cmd: python -m src.data.data_ingestion
     deps:
     - mlfow_run_id.txt
+    - src/config.py
     - src/data/data_ingestion.py
     - src/mlflow_run_id_fetch_helper.py
     outs:
@@ -18,6 +20,7 @@ stages:
     cmd: python -m src.preprocessing.data_preprocessing
     deps:
     - data/raw
+    - src/config.py
     - mlfow_run_id.txt
     - src/mlflow_run_id_fetch_helper.py
     - src/preprocessing/data_preprocessing.py
@@ -27,6 +30,7 @@ stages:
     cmd: python -m src.features.feature_engineering
     deps:
     - data/processed
+    - src/config.py
     - mlfow_run_id.txt
     - src/features/feature_engineering.py
     - src/mlflow_run_id_fetch_helper.py
@@ -36,6 +40,7 @@ stages:
     cmd: python -m src.model.model_building
     deps:
     - data/interim
+    - src/config.py
     - mlfow_run_id.txt
     - src/mlflow_run_id_fetch_helper.py
     - src/model/model_building.py
@@ -45,6 +50,7 @@ stages:
     cmd: python -m src.model.model_evaluation
     deps:
     - data/interim
+    - src/config.py
     - mlfow_run_id.txt
     - models
     - src/mlflow_run_id_fetch_helper.py
