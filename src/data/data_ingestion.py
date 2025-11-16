@@ -26,9 +26,9 @@ def run_data_ingestion():
 
     df.drop(columns=['tweet_id'],inplace=True)
 
-    final_df = df[df['sentiment'].isin(['happiness','sadness'])]
+    final_df = df[df['sentiment'].isin(['neutral','sadness'])]
 
-    final_df['sentiment'].replace({'happiness':1, 'sadness':0},inplace=True)
+    final_df['sentiment'].replace({'neutral':1, 'sadness':0},inplace=True)
 
     train_data, test_data = train_test_split(final_df, test_size=TEST_SIZE, random_state=42)
 
